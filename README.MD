@@ -1,1 +1,5 @@
-# this is a project i decided to make to brush up on my django to basically pave the way for another project i have in mind
+# **DUMMY FORUM**
+### a little project i decided to code up to brush up my django and psql, this is to also help pave the way for another future project i have in mind 
+
+# **TECHNOLOGIES USED**
+
