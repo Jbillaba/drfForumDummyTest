@@ -1,0 +1,1 @@
+# this is a project i decided to make to brush up on my django to basically pave the way for another project i have in mind
