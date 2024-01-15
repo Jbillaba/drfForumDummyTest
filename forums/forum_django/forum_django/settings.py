@@ -11,6 +11,15 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
+import os
+
+load_dotenv()
+DJANGO_KEY = os.getenv('DJANGO_KEY')
+DB_NAME = os.getenv('DATABASE_NAME')
+DB_USER = os.getenv('DATABASE_USER')
+DB_PASSWORD = os.getenv('DATABASE_PASSWORD')
+
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -20,7 +29,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
 
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = 'django-insecure-rsu#xrnoxy7g&h3d!=g@ac91rsee^avy9645*!5(q97o1fl3z$'
+SECRET_KEY = DJANGO_KEY
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
@@ -40,6 +49,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'forum'
 ]
+
+AUTH_USER_MODEL = "forum.User"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -77,8 +88,11 @@ WSGI_APPLICATION = 'forum_django.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': DB_NAME,
+        'USER': DB_USER,
+        'PASSWORD':DB_PASSWORD,
+        'HOST':'localhost'
     }
 }
 
