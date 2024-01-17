@@ -2,9 +2,9 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
-    username=models.CharField(max_length=11, unique=True)
+    username=models.CharField(max_length=30)
     name=models.CharField(max_length=20)
-    email=models.EmailField()
+    email=models.EmailField(max_length=60, unique=True)
     password=models.CharField(max_length=30)
 
     def __str__(self):
@@ -12,7 +12,7 @@ class User(AbstractUser):
 
 class Post(models.Model):
     title=models.CharField(max_length=30, default='')
-    text=models.TextField()
+    text=models.TextField(max_length=255)
     op=models.ForeignKey(User, on_delete=models.CASCADE, related_name='originalposter')
     created_on=models.DateTimeField(auto_now_add=True)
 
