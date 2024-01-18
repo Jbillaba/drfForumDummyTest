@@ -31,7 +31,7 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         fields=['url', 'id', 'username', 'name', 'email', 'password']
 
 class PostSerializer(serializers.HyperlinkedModelSerializer):
-    op=serializers.ReadOnlyField(source='op.username')
+    
     class Meta:
         model=Post
         fields=['url', 'id', 'title', 'text', 'op']
