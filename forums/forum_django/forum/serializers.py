@@ -1,6 +1,7 @@
 from .models import User, Post
 from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 ## TODO: finish this file 
 
@@ -8,11 +9,19 @@ class RegisterSerializer(serializers.ModelSerializer):
     password=serializers.CharField(
         write_only=True, required=True, validators=[validate_password]
     )
+    password2=serializers.CharField(write_only=True, required=True)
 
     class Meta:
         model=User
-        fields=['username', 'name', 'email', 'password']
-    
+        fields=['username', 'name', 'email', 'password', 'password2']
+
+    def validate(self, attrs):
+        if attrs['password']!=attrs['password2']:
+            raise serializers.ValidationError(
+                {'password':"Password fields didn't match"})
+
+        return attrs
+
     def create(self, validated_data):
         user=User.objects.create(
             name=validated_data['name'],
@@ -35,3 +44,14 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
     class Meta:
         model=Post
         fields=['url', 'id', 'title', 'text', 'op']
+
+class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, User):
+        token=super().get_token(User)
+
+        #add custom claims
+        token['username']=User.username
+        token['email']=User.email
+
+        return token
