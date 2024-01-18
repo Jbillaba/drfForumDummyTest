@@ -11,7 +11,7 @@ class User(AbstractUser):
         return self.username
 
 class Post(models.Model):
-    title=models.CharField(max_length=30, default='')
+    title=models.CharField(max_length=100, default='')
     text=models.TextField(max_length=255)
     op=models.ForeignKey(User, on_delete=models.CASCADE, related_name='originalposter')
     created_on=models.DateTimeField(auto_now_add=True)
