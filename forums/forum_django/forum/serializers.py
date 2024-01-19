@@ -40,13 +40,20 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         fields=['url', 'id', 'username', 'name', 'email', 'password']
 
 class PostSerializer(serializers.HyperlinkedModelSerializer):
+    op=serializers.SerializerMethodField("get_op")
     class Meta:
         model=Post
-        fields=['url', 'id', 'title', 'text', 'op']
+        fields=['url', 'id', 'title', 'text', 'op', 'created_on']
+    
+    def get_op(self, object):
+        return object.op.username
     
     def create(self, validated_data):
         validated_data['op']=self.context['request'].user
         return super(PostSerializer, self).create(validated_data)
+    
+    
+
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
