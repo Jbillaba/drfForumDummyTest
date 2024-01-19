@@ -4,7 +4,6 @@ from django.contrib.auth.password_validation import validate_password
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from django.contrib.humanize.templatetags.humanize import naturaltime
 
-## TODO: finish this file 
 
 class RegisterSerializer(serializers.ModelSerializer):
     password=serializers.CharField(
@@ -67,5 +66,6 @@ class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
         #add custom claims
         token['username']=User.username
         token['email']=User.email
+        token['name']=User.name
 
         return token

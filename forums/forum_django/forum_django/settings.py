@@ -40,6 +40,12 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
+CORS_ORIGIN_ALLOW_ALL = False
+
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:4200'
+]
+
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -51,12 +57,14 @@ INSTALLED_APPS = [
     'forum',
     'rest_framework_simplejwt.token_blacklist',
     'django.contrib.humanize',
+    'corsheaders'
     
 ]
 
 AUTH_USER_MODEL = "forum.User"
 
 MIDDLEWARE = [
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
