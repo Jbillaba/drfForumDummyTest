@@ -3,6 +3,7 @@ from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 from .models import User, Post
 from .serializers import UserSerializer, PostSerializer, RegisterSerializer, MyTokenObtainPairSerializer
 from  rest_framework_simplejwt.views import TokenObtainPairView
+from rest_framework import filters
 
 #Login User 
 class MyTokenObtainPairView(TokenObtainPairView):
@@ -19,10 +20,16 @@ class PostViewSet(viewsets.ModelViewSet):
     queryset=Post.objects.all()
     serializer_class=PostSerializer
     permission_classes=(IsAuthenticatedOrReadOnly,)
+    filter_backends=[filters.OrderingFilter, filters.SearchFilter]
+    ordering_fields=['title', 'op', 'created_on']
+    search_fields=['title','text',]
 
 class UserViewSet(viewsets.ModelViewSet):
     queryset=User.objects.all()
     serializer_class=UserSerializer
     permission_classes=(IsAuthenticatedOrReadOnly,)
+    filter_backends=[filters.OrderingFilter, filters.SearchFilter]
+    ordering_fields=['username', 'name']
+    search_fields=['username','name']
 
 
