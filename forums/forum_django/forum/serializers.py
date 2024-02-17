@@ -1,4 +1,4 @@
-from .models import User, Post
+from .models import User, Post, Comment
 from rest_framework import serializers
 from django.contrib.auth.password_validation import validate_password
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
@@ -57,7 +57,17 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
         validated_data['op']=self.context['request'].user
         return super(PostSerializer, self).create(validated_data)
     
-    
+class CommentSerializer(serializers.HyperlinkedModelSerializer):
+    op=serializers.SerializerMethodField("get_op")
+    created_on=serializers.SerializerMethodField("get_timesince")
+    class Meta:
+        model=Comment
+        fields=['op', 'text', 'post', 'created_on']
+    def get_op(self, object):
+        return object.op.username
+    def get_timesince(self, object):
+        return naturaltime(object.created)
+
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, User):

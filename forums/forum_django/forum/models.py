@@ -15,6 +15,7 @@ class Post(models.Model):
     title=models.CharField(max_length=100, default='')
     text=models.TextField(max_length=255)
     op=models.ForeignKey(User, on_delete=models.CASCADE, related_name='originalposter')
+    # code for comments
     created_on=models.DateTimeField(auto_now_add=True)
 
     @property
@@ -24,3 +25,11 @@ class Post(models.Model):
     def __str__(self):
         return self.title
     
+class Comment(models.Model):
+    post=models.ForeignKey(Post, on_delete=models.CASCADE, related_name='originalpost')
+    op=models.ForeignKey(User, on_delete=models.CASCADE, related_name='commentposter')
+    text=models.TextField(max_length=255)
+    created_on=models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return self.text
