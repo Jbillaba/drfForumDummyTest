@@ -62,11 +62,17 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
     created_on=serializers.SerializerMethodField("get_timesince")
     class Meta:
         model=Comment
-        fields=['op', 'text', 'post', 'created_on']
+        fields=['url','id','op', 'text', 'post', 'created_on']
+    
     def get_op(self, object):
         return object.op.username
+    
     def get_timesince(self, object):
-        return naturaltime(object.created)
+        return naturaltime(object.created_on)
+    
+    def create(self, validated_data):
+        validated_data['op']=self.context['request'].user
+        return super(CommentSerializer, self).create(validated_data)
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
