@@ -39,13 +39,34 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
         model=User
         fields=['url', 'id', 'username', 'name', 'email', 'password']
 
+    
+class CommentSerializer(serializers.HyperlinkedModelSerializer):
+    op=serializers.SerializerMethodField("get_op")
+    post=serializers.SerializerMethodField("get_post_id")
+    created_on=serializers.SerializerMethodField("get_timesince")
+    class Meta:
+        model=Comment
+        fields=['url','id','op', 'text', 'post', 'created_on',]
+    
+    def get_op(self, object):
+        return object.op.username
+    
+    def get_timesince(self, object):
+        return naturaltime(object.created_on)
+    
+    def get_post_id(self, object):
+        return object.post.id
+    
+    def create(self, validated_data):
+        validated_data['op']=self.context['request'].user
+        return super(CommentSerializer, self).create(validated_data)
 
 class PostSerializer(serializers.HyperlinkedModelSerializer):
     op=serializers.SerializerMethodField("get_op")
     created_on=serializers.SerializerMethodField("get_timesince")
     class Meta:
         model=Post
-        fields=['url', 'id', 'title', 'text', 'op', 'created_on']
+        fields=['url', 'id', 'title', 'text', 'op', 'created_on', ]
     
     def get_op(self, object):
         return object.op.username
@@ -56,23 +77,6 @@ class PostSerializer(serializers.HyperlinkedModelSerializer):
     def create(self, validated_data):
         validated_data['op']=self.context['request'].user
         return super(PostSerializer, self).create(validated_data)
-    
-class CommentSerializer(serializers.HyperlinkedModelSerializer):
-    op=serializers.SerializerMethodField("get_op")
-    created_on=serializers.SerializerMethodField("get_timesince")
-    class Meta:
-        model=Comment
-        fields=['url','id','op', 'text', 'post', 'created_on']
-    
-    def get_op(self, object):
-        return object.op.username
-    
-    def get_timesince(self, object):
-        return naturaltime(object.created_on)
-    
-    def create(self, validated_data):
-        validated_data['op']=self.context['request'].user
-        return super(CommentSerializer, self).create(validated_data)
 
 class MyTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod

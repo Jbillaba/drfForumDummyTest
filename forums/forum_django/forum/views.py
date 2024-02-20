@@ -1,9 +1,8 @@
-from rest_framework import viewsets, generics
+from rest_framework import viewsets, generics, filters
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 from .models import User, Post, Comment
 from .serializers import UserSerializer, PostSerializer, RegisterSerializer, MyTokenObtainPairSerializer, CommentSerializer
 from  rest_framework_simplejwt.views import TokenObtainPairView
-from rest_framework import filters
 
 #Login User 
 class MyTokenObtainPairView(TokenObtainPairView):
@@ -36,4 +35,7 @@ class CommentViewSet(viewsets.ModelViewSet):
     queryset=Comment.objects.all()
     serializer_class=CommentSerializer
     permission_classses=(IsAuthenticatedOrReadOnly,)
+    filter_backends=[filters.OrderingFilter, filters.SearchFilter]
+    ordering_fields=['created_on',]
+    search_fields=['post']
     
