@@ -1,4 +1,5 @@
 from rest_framework import viewsets, generics, filters
+from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.permissions import AllowAny, IsAuthenticatedOrReadOnly
 from .models import User, Post, Comment
 from .serializers import UserSerializer, PostSerializer, RegisterSerializer, MyTokenObtainPairSerializer, CommentSerializer
@@ -37,5 +38,5 @@ class CommentViewSet(viewsets.ModelViewSet):
     permission_classses=(IsAuthenticatedOrReadOnly,)
     filter_backends=[filters.OrderingFilter, filters.SearchFilter]
     ordering_fields=['created_on',]
-    search_fields=['post']
+    search_fields=['post__id']
     

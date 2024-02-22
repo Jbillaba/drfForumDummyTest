@@ -42,11 +42,11 @@ class UserSerializer(serializers.HyperlinkedModelSerializer):
     
 class CommentSerializer(serializers.HyperlinkedModelSerializer):
     op=serializers.SerializerMethodField("get_op")
-    post=serializers.SerializerMethodField("get_post_id")
+    posted_on=serializers.SerializerMethodField("get_post_id")
     created_on=serializers.SerializerMethodField("get_timesince")
     class Meta:
         model=Comment
-        fields=['url','id','op', 'text', 'post', 'created_on',]
+        fields=['url','id','op', 'text', 'post', 'posted_on' , 'created_on',]
     
     def get_op(self, object):
         return object.op.username
