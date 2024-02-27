@@ -46,7 +46,7 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
     created_on=serializers.SerializerMethodField("get_timesince")
     class Meta:
         model=Comment
-        fields=['url','id','op', 'text', 'post', 'posted_on' , 'created_on',]
+        fields=['url','id','op', 'text', 'post', 'posted_on' , 'created_on', ]
     
     def get_op(self, object):
         return object.op.username
@@ -64,15 +64,20 @@ class CommentSerializer(serializers.HyperlinkedModelSerializer):
 class PostSerializer(serializers.HyperlinkedModelSerializer):
     op=serializers.SerializerMethodField("get_op")
     created_on=serializers.SerializerMethodField("get_timesince")
+    number_of_comments=serializers.SerializerMethodField("get_number_of_comments")
     class Meta:
         model=Post
-        fields=['url', 'id', 'title', 'text', 'op', 'created_on', ]
+        fields=['url', 'id', 'title', 'text', 'op', 'created_on', 'number_of_comments' ]
     
     def get_op(self, object):
         return object.op.username
     
     def get_timesince(self, object):
         return naturaltime(object.created_on)
+    
+    def get_number_of_comments(self, object):
+        comments=Comment.objects.all()
+        return comments.filter(post=object.id).count()
     
     def create(self, validated_data):
         validated_data['op']=self.context['request'].user
