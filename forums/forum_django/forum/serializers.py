@@ -35,9 +35,14 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
 
 class UserSerializer(serializers.HyperlinkedModelSerializer):
+    account_created=serializers.SerializerMethodField("get_time_since_creation")
     class Meta:
         model=User
-        fields=['url', 'id', 'username', 'name', 'email', 'password']
+        fields=['url', 'id', 'username', 'name', 'email', 'account_created' ,'password']
+    
+    def get_time_since_creation(self, object):
+        return naturaltime(object.created_on)
+
 
     
 class CommentSerializer(serializers.HyperlinkedModelSerializer):
